@@ -26,7 +26,16 @@ class Comment < ApplicationRecord
   def self.parse(obj)
 
     rea = lambda do |comment, parent_id=nil|
-      new_comment = Comment.new(comment['data'], parent_id)
+      # username = 
+      user = User.find_by_name(username)
+      if user.nil?
+        user = User.create(name: username)
+      end
+      input = {
+        parent_comment_id: parent_id,
+        user_id: user.id
+      }
+      new_comment = Comment.create(input)
       return if comment['data']['children'].nil?
       comment['data']['children'].each do |child|
         rea.call(child, new_comment.id)
@@ -38,9 +47,4 @@ class Comment < ApplicationRecord
     end
   end
 
-
-  def self.initialize(hash, parent_id=nil)
-
-    # save to db based on comment keys
-  end
 end
