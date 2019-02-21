@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 2019_02_19_213352) do
     t.integer "comment_id"
     t.integer "parent_comment_id"
     t.integer "user_id"
+    t.integer "child_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

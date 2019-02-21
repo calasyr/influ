@@ -21,7 +21,8 @@ class Comment < ApplicationRecord
 
         input = {
           parent_comment_id: parent_id,
-          user_id: user.id
+          user_id: user.id,
+          child_count: 0
         }
 
         new_comment = Comment.create(input)
@@ -29,7 +30,11 @@ class Comment < ApplicationRecord
         replies = comment['data']['replies']
 
         if replies && replies['data']['children'].any?
-          replies['data']['children'].each do |child|
+          children = replies['data']['children']
+
+          new_comment.update_attribute('child_count', children.count)
+
+          children.each do |child|
             rea.call(child, new_comment.id)
           end
         end
